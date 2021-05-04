@@ -1,0 +1,4 @@
+package biocore
+
+modules = BioCore.Sequence,
+          BioCore.Strand

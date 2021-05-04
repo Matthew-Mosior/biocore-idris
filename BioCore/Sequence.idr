@@ -25,6 +25,10 @@ public export
 Ord Qual where
   compare (UnQual x) (UnQual y) = compare x y 
 
+public export
+extractUnQual : Qual -> Int
+extractUnQual (UnQual unQual) = unQual
+
 --------
 
 
@@ -46,6 +50,10 @@ Eq Offset where
 public export
 Ord Offset where
   compare (UnOff x) (UnOff y) = compare x y
+
+public export
+extractUnOff : Offset -> Int
+extractUnOff (UnOff unOff) = unOff
 
 ----------
 
@@ -69,6 +77,10 @@ public export
 Ord SeqData where
   compare (UnSD x) (UnSD y) = compare x y
 
+public export
+extractUnSD : SeqData -> String
+extractUnSD (UnSD unSD) = unSD
+
 -----------
 
 
@@ -91,6 +103,10 @@ public export
 Ord SeqLabel where
   compare (UnSL x) (UnSL y) = compare x y
 
+public export
+extractUnSL : SeqLabel -> List Char
+extractUnSL (UnSL unSL) = unSL
+
 ------------
 
 
@@ -112,6 +128,10 @@ Eq QualData where
 public export
 Ord QualData where
   compare (UnQD x) (UnQD y) = compare x y
+
+public export
+extractUnQD : QualData -> List Char
+extractUnQD (UnQD unQD) = unQD
 
 ------------
 

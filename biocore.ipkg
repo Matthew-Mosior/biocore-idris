@@ -1,4 +1,17 @@
 package biocore
 
-modules = BioCore.Sequence,
-          BioCore.Strand
+authors    = "Matthew-Mosior"
+version    = "0.1.0.0"
+readme     = "README.md"
+
+homepage   = "https://github.com/Matthew-Mosior/idris2-biocore"
+sourceloc  = "https://github.com/Matthew-Mosior/idris2-biocore.git"
+bugtracker = "https://github.com/Matthew-Mosior/idris2-biocore/issues"
+
+license    = "BSD-3-Clause License"
+brief      = "Idris (Idris2) port of the Haskell biocore library."
+
+modules    = BioCore.Sequence,
+             BioCore.Strand
+
+sourcedir  = "src"

@@ -26,6 +26,10 @@ Ord Qual where
   compare (UnQual x) (UnQual y) = compare x y 
 
 public export
+Num Qual where
+  fromInteger = UnQual . fromInteger
+
+public export
 extractUnQual : Qual -> Int
 extractUnQual (UnQual unQual) = unQual
 
@@ -50,6 +54,10 @@ Eq Offset where
 public export
 Ord Offset where
   compare (UnOff x) (UnOff y) = compare x y
+
+public export
+Num Offset where
+  fromInteger = UnOff . fromInteger
 
 public export
 extractUnOff : Offset -> Int
@@ -88,11 +96,11 @@ extractUnSD (UnSD unSD) = unSD
 
 public export
 data SeqLabel = ||| Sequence labels are List String of ASCII characters.
-                UnSL (List Char)
+                UnSL String
 
 public export
 Show SeqLabel where
-  show (UnSL x) = pack x
+  show (UnSL x) = show x
 
 public export
 Eq SeqLabel where
@@ -104,7 +112,7 @@ Ord SeqLabel where
   compare (UnSL x) (UnSL y) = compare x y
 
 public export
-extractUnSL : SeqLabel -> List Char
+extractUnSL : SeqLabel -> String
 extractUnSL (UnSL unSL) = unSL
 
 ------------
@@ -114,11 +122,11 @@ extractUnSL (UnSL unSL) = unSL
 
 public export
 data QualData = ||| The quality data associated with the sequence data.
-                UnQD (List Char)
+                UnQD String
 
 public export
 Show QualData where
-  show (UnQD x) = pack x
+  show (UnQD x) = show x
 
 public export
 Eq QualData where
@@ -130,34 +138,37 @@ Ord QualData where
   compare (UnQD x) (UnQD y) = compare x y
 
 public export
-extractUnQD : QualData -> List Char
+extractUnQD : QualData -> String
 extractUnQD (UnQD unQD) = unQD
 
 ------------
 
 public export
 toFastaSeqData : SeqLabel -> SeqData -> String
-toFastaSeqData (UnSL seqlabel) (UnSD seqdata) = ">"             ++ 
-                                                pack seqlabel   ++ 
-                                                "\n"            ++ 
+toFastaSeqData (UnSL seqlabel) (UnSD seqdata) = ">"      ++ 
+                                                seqlabel ++ 
+                                                "\n"     ++ 
                                                 (wrapSeqData seqdata (unpack seqdata))
   where wrapSeqData : String -> List Char -> String
         wrapSeqData _ []       = "" 
         wrapSeqData s (_::ss') = if isNil (unpack s)
                                    then ""
                                    else let (ln,rest) = splitAt 60 (unpack s)
-                                          in (pack ln) ++ "\n" ++ 
+                                          in (pack ln) ++ 
+                                             "\n"      ++ 
                                              (wrapSeqData (pack rest) ss')
 
 public export
-toFastaQual : SeqLabel -> QualData -> List Char
-toFastaQual (UnSL seqlabel) (UnQD qualdata) = (unpack ">")  ++ 
-                                              seqlabel      ++ 
-                                              (unpack "\n") ++ 
-                                              (wrapqualdata qualdata qualdata)
-  where wrapqualdata : List Char -> List Char -> List Char
-        wrapqualdata _ []       = []
-        wrapqualdata s (_::ss') = if isNil s
-                                    then []
-                                    else let (ln,rest) = splitAt 20 s
-                                           in ln ++ (unpack "\n") ++ (wrapqualdata rest ss')
+toFastaQual : SeqLabel -> QualData -> String
+toFastaQual (UnSL seqlabel) (UnQD qualdata) = ">"      ++ 
+                                              seqlabel ++ 
+                                              "\n"     ++ 
+                                              (wrapqualdata qualdata (unpack qualdata))
+  where wrapqualdata : String -> List Char -> String
+        wrapqualdata _ []       = ""
+        wrapqualdata s (_::ss') = if isNil (unpack s)
+                                    then ""
+                                    else let (ln,rest) = splitAt 20 (unpack s)
+                                           in (pack ln) ++ 
+                                              "\n"      ++
+                                              (wrapqualdata (pack rest) ss')
